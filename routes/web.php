@@ -3,9 +3,6 @@
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-Route::get('/', function () {
-    return Inertia::render('welcome');
-})->name('home');
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', function () {
@@ -21,18 +18,16 @@ Route::get('/test', function () {
     return Inertia::render('Test');
 })->name('test');
 
-Route::get('/', function () { // ถ้าไม่ใช้ Controller โดยตรง
-    $data = [
-        'name' => 'ผู้ใช้งาน',
-        'items' => ['ปากกา', 'ดินสอ', 'ยางลบ'],
-    ];
-    return view('welcome', $data);
-});
+
 
 Route::get('/fruit', function () {
     return Inertia::render('Fruit');
 });
 
-Route::get('/fruit', function () {
-    return view('app'); // ชี้ไปที่ resources/views/app.blade.php
-});
+
+
+
+Route::get('/{any}', function () {
+    return view('app');
+})->where('any', '.*');
+
