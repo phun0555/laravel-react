@@ -1,126 +1,46 @@
-import { useState } from 'react';
-import '../../css/fruit.css';
+// resources/js/pages/Fruit.tsx
 
-function FilterableProductTable({ products }) {
-  const [filterText, setFilterText] = useState('');
-  const [inStockOnly, setInStockOnly] = useState(false);
+import React, { useState } from 'react';
+
+const exchangeRates: Record<string, Record<string, number>> = {
+  THB: { USD: 0.028, VND: 700 },
+  USD: { THB: 35.5, VND: 24500 },
+  VND: { THB: 0.0014, USD: 0.000041 },
+};
+
+function Fruit() {
+  const [amount, setAmount] = useState(1);
+  const [fromCurrency, setFromCurrency] = useState('THB');
+  const [toCurrency, setToCurrency] = useState('USD');
+  const [converted, setConverted] = useState<number | null>(null);
+
+  const convert = () => {
+    const rate = exchangeRates[fromCurrency][toCurrency];
+    setConverted((amount * rate));
+  };
 
   return (
-    <div>
-      <SearchBar 
-        filterText={filterText} 
-        inStockOnly={inStockOnly} 
-        onFilterTextChange={setFilterText} 
-        onInStockOnlyChange={setInStockOnly} />
-      <ProductTable 
-        products={products} 
-        filterText={filterText}
-        inStockOnly={inStockOnly} />
+    <div style={{ textAlign: 'center', marginTop: '50px' }}>
+      <h2>💱 Currency Converter</h2>
+      <input
+        type="number"
+        value={amount}
+        onChange={(e) => setAmount(Number(e.target.value))}
+        style={{ padding: '10px', margin: '10px' }}
+      />
+      <select value={fromCurrency} onChange={(e) => setFromCurrency(e.target.value)}>
+        {Object.keys(exchangeRates).map((cur) => <option key={cur}>{cur}</option>)}
+      </select>
+      <span> ➡️ </span>
+      <select value={toCurrency} onChange={(e) => setToCurrency(e.target.value)}>
+        {Object.keys(exchangeRates[fromCurrency]).map((cur) => <option key={cur}>{cur}</option>)}
+      </select>
+      <button onClick={convert} style={{ marginLeft: '10px' }}>แปลง</button>
+      {converted !== null && (
+        <h3>ผลลัพธ์: {converted.toFixed(2)} {toCurrency}</h3>
+      )}
     </div>
   );
 }
 
-function ProductCategoryRow({ category }) {
-  return (
-    <tr>
-      <th colSpan="2">
-        {category}
-      </th>
-    </tr>
-  );
-}
-
-function ProductRow({ product }) {
-  const name = product.stocked ? product.name :
-    <span style={{ color: 'red' }}>
-      {product.name}
-    </span>;
-
-  return (
-    <tr>
-      <td>{name}</td>
-      <td>{product.price}</td>
-    </tr>
-  );
-}
-
-function ProductTable({ products, filterText, inStockOnly }) {
-  const rows = [];
-  let lastCategory = null;
-
-  products.forEach((product) => {
-    if (
-      product.name.toLowerCase().indexOf(
-        filterText.toLowerCase()
-      ) === -1
-    ) {
-      return;
-    }
-    if (inStockOnly && !product.stocked) {
-      return;
-    }
-    if (product.category !== lastCategory) {
-      rows.push(
-        <ProductCategoryRow
-          category={product.category}
-          key={product.category} />
-      );
-    }
-    rows.push(
-      <ProductRow
-        product={product}
-        key={product.name} />
-    );
-    lastCategory = product.category;
-  });
-
-  return (
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Price</th>
-        </tr>
-      </thead>
-      <tbody>{rows}</tbody>
-    </table>
-  );
-}
-
-function SearchBar({
-  filterText,
-  inStockOnly,
-  onFilterTextChange,
-  onInStockOnlyChange
-}) {
-  return (
-    <form>
-      <input 
-        type="text" 
-        value={filterText} placeholder="Search..." 
-        onChange={(e) => onFilterTextChange(e.target.value)} />
-      <label>
-        <input 
-          type="checkbox" 
-          checked={inStockOnly} 
-          onChange={(e) => onInStockOnlyChange(e.target.checked)} />
-        {' '}
-        Only show products in stock
-      </label>
-    </form>
-  );
-}
-
-const PRODUCTS = [
-  {category: "Fruits", price: "$1", stocked: true, name: "Apple"},
-  {category: "Fruits", price: "$1", stocked: true, name: "Dragonfruit"},
-  {category: "Fruits", price: "$2", stocked: false, name: "Passionfruit"},
-  {category: "Vegetables", price: "$2", stocked: true, name: "Spinach"},
-  {category: "Vegetables", price: "$4", stocked: false, name: "Pumpkin"},
-  {category: "Vegetables", price: "$1", stocked: true, name: "Peas"}
-];
-
-export default function Fruit() {
-  return <FilterableProductTable products={PRODUCTS} />;
-}
-
+export default Fruit;

@@ -16,9 +16,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
 require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';
 
-Route::get('/fruit', function () {
-    return Inertia::render('Fruit');
-})->name('fruit');
 
 Route::get('/test', function () {
     return Inertia::render('Test');
@@ -32,4 +29,10 @@ Route::get('/', function () { // ถ้าไม่ใช้ Controller โด�
     return view('welcome', $data);
 });
 
+Route::get('/fruit', function () {
+    return Inertia::render('Fruit');
+});
 
+Route::get('/fruit', function () {
+    return view('app'); // ชี้ไปที่ resources/views/app.blade.php
+});
