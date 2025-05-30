@@ -1,10 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import Fruit from './pages/Fruit'; // หรือหน้าหลักที่คุณใช้
+import CurrencyManager from './pages/CurrencyManager';
 
-const root = ReactDOM.createRoot(document.getElementById('app')!);
-root.render(
-    <React.StrictMode>
-        <Fruit />
-    </React.StrictMode>
+ReactDOM.createRoot(document.getElementById('app')!).render(
+  <React.StrictMode>
+    <CurrencyManager />
+  </React.StrictMode>
 );
