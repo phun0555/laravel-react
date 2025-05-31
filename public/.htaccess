@@ -5,6 +5,9 @@
 
     RewriteEngine On
 
+    # ✅ เพิ่มตรงนี้เพื่อให้ Laravel รู้ว่าทำงานใต้ /CurrencyManager
+    RewriteBase /CurrencyManager/
+
     # Handle Authorization Header
     RewriteCond %{HTTP:Authorization} .
     RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
