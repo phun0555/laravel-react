@@ -3,6 +3,7 @@
 use App\Models\Currency;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use App\Http\Controllers\CurrencyController;
 
 
 Route::middleware(['auth', 'verified'])->group(function () {
@@ -28,9 +29,9 @@ Route::get('/fruit', function () {
 
 
 
-Route::get('/{any}', function () {
-    return view('app');
-})->where('any', '.*');
+//Route::get('/{any}', function () {
+    //return view('app');
+//})->where('any', '.*');
 
 Route::prefix('CurrencyManager')->group(function () {
     Route::get('/', function () {
@@ -38,6 +39,7 @@ Route::prefix('CurrencyManager')->group(function () {
     });
 
     // API routes
-    Route::get('/currencies', [Currency::class, 'index']);
+Route::get('/currencies', [Currency::class, 'index']);
     // เพิ่ม routes ตามต้องการ
 });
+Route::get('/currencies', [CurrencyController::class, 'index']);
