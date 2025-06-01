@@ -27,11 +27,13 @@ Route::get('/fruit', function () {
 });
 
 
+Route::prefix('CurrencyManager')->group(function () {
+    Route::get('/{any?}', function () {
+        return view('app'); // blade ที่ load React app
+    })->where('any', '.*');
+});
 
 
-//Route::get('/{any}', function () {
-    //return view('app');
-//})->where('any', '.*');
 
 Route::prefix('CurrencyManager')->group(function () {
     Route::get('/', function () {
